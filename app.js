@@ -40,6 +40,39 @@ app.get("/taskLists", (req, res) => {
     });
 });
 
+app.get("/tasklists/:tasklistId", (req, res) => {
+  let tasklistId = req.params.tasklistId;
+  TaskList.find({ _id: tasklistId })
+    .then((taskList) => {
+      res.status(200).send(taskList);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.post("/tasklists", (req, res) => {
+  let taskListObj = { title: req.body.title };
+  TaskList(taskListObj)
+    .save()
+    .then((lists) => {
+      res.status(201).send(lists);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.put("/tasklists/:tasklistId", (req, res) => {
+  TaskList.findOneAndUpdate({ _id: req.params.tasklistId }, { $set: req.body })
+    .then((tasklists) => {
+      res.status(200).send(tasklists);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });

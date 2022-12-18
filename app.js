@@ -73,6 +73,16 @@ app.put("/tasklists/:tasklistId", (req, res) => {
     });
 });
 
+app.delete("/tasklists/:tasklistId", (req, res) => {
+  TaskList.findByIdAndDelete({ _id: req.params.tasklistId })
+    .then((tasklists) => {
+      res.status(200).send(tasklists);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });

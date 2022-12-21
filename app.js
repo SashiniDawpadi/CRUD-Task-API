@@ -83,6 +83,40 @@ app.delete("/tasklists/:tasklistId", (req, res) => {
     });
 });
 
+// CRUD operations for tasks
+app.get("/tasklists/:tasklistId/tasks", (req, res) => {
+  Task.find({ _tasklistId: req.params.tasklistId })
+    .then((tasks) => {
+      res.status(200).send(tasks);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+app.post("/tasklists/:tasklistId/tasks", (req, res) => {
+  let taskObj = { title: req.body.title, _tasklistId: req.params.tasklistId };
+  Task(taskObj)
+    .save()
+    .then((task) => {
+      res.status(201).send(task);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+
+app.get("/tasklists/:tasklistId/tasks/:taskId", (req, res) => {
+  Task.find({ _tasklistId: req.params.tasklistId , _id : req.params.taskId })
+    .then((tasks) => {
+      res.status(200).send(tasks);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
 app.listen(3000, () => {
   console.log("Server listening on port 3000");
 });

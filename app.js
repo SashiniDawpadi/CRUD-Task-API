@@ -63,7 +63,21 @@ app.post("/tasklists", (req, res) => {
     });
 });
 
+// put is for full update for a Object
+
 app.put("/tasklists/:tasklistId", (req, res) => {
+  TaskList.findOneAndUpdate({ _id: req.params.tasklistId }, { $set: req.body })
+    .then((tasklists) => {
+      res.status(200).send(tasklists);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+// patch is partial update of one field of one Object
+
+app.patch("/tasklists/:tasklistId", (req, res) => {
   TaskList.findOneAndUpdate({ _id: req.params.tasklistId }, { $set: req.body })
     .then((tasklists) => {
       res.status(200).send(tasklists);
@@ -106,11 +120,40 @@ app.post("/tasklists/:tasklistId/tasks", (req, res) => {
     });
 });
 
-
 app.get("/tasklists/:tasklistId/tasks/:taskId", (req, res) => {
-  Task.find({ _tasklistId: req.params.tasklistId , _id : req.params.taskId })
+  Task.find({ _tasklistId: req.params.tasklistId, _id: req.params.taskId })
     .then((tasks) => {
       res.status(200).send(tasks);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+// update one task belonging to one tasklist
+
+app.patch("/tasklists/:tasklistId/tasks/:taskId", (req, res) => {
+  TaskList.findOneAndUpdate(
+    { _taskListId: req.params.tasklistId, _id: req.params.taskId },
+    { $set: req.body }
+  )
+    .then((task) => {
+      res.status(200).send(task);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
+
+// delete one task belonging to one tasklist
+
+app.delete("/tasklists/:tasklistId/tasks/:taskId", (req, res) => {
+  TaskList.findOneAndDelete({
+    _taskListId: req.params.tasklistId,
+    _id: req.params.taskId,
+  })
+    .then((task) => {
+      res.status(200).send(task);
     })
     .catch((error) => {
       console.log(error);
